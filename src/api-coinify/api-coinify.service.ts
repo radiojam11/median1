@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { CreateApiCoinifyDto } from './dto/create-api-coinify.dto';
 import { UpdateApiCoinifyDto } from './dto/update-api-coinify.dto';
 import { HttpService } from '@nestjs/axios';
-import { EstimateTransactionDto } from './dto/estimate-transaction.dto';
 import { lastValueFrom } from 'rxjs';
 import { IAllRates, IRateSpecificCurrency } from './api-coinify.service.types';
+import * as crypto from 'crypto-js';
 
 @Injectable()
 export class ApiCoinifyService {
   constructor(private readonly http: HttpService) {}
-  create(createApiCoinifyDto: CreateApiCoinifyDto) {
+  /*   create(createApiCoinifyDto: CreateApiCoinifyDto) {
     return 'This action adds a new apiCoinify';
   }
 
@@ -29,7 +29,7 @@ export class ApiCoinifyService {
     return `This action removes a #${id} apiCoinify`;
   }
 
-  // Sopra CRUD - da  qui gestione dati
+ */ // Sopra CRUD - da  qui gestione dati
   async getRateSpecificCurrency(currency: string): Promise<{
     name: string;
     buy: number;
@@ -62,20 +62,34 @@ export class ApiCoinifyService {
     console.log(response.data.data);
     return { data: response.data };
   }
-  /* 
-  async getCoinifyPayments(): Promise<{
+  async getCoinifyPayments(createApiCoinifyDto): Promise<{
     data: any;
   }> {
+    const apiKey = createApiCoinifyDto['apiKey'];
+    const secretKey = createApiCoinifyDto['secretKey'];
+    const date = new Date();
+    const nonce = date.getTime().toString();
+    console.log('API KEY :    ', apiKey);
+    const message = nonce + apiKey;
+    console.log('message:   ', message);
+    console.log('SECRET API:    ', secretKey);
+    const generatedSignature = crypto
+      .HmacSHA256(message, secretKey)
+      .toString(crypto.enc.Hex);
+    console.log('QUESTO E generateSignature:    ', generatedSignature);
+    //Authorization: Coinify apikey="<api_key>", nonce="<nonce>", signature="<signature>""
+    const auth_header = `Coinify apiKey="${apiKey}", nonce="${nonce}", signature="${generatedSignature}"`;
+    console.log(auth_header);
     const options = {
       url: 'https://api.coinify.com/v3/payments',
       params: {},
       headers: {
-        Authorization: auth_header,
+        Authorization: `${auth_header}`,
         'Content-Type': 'application/json',
       },
     };
     const response = await lastValueFrom(this.http.request<IAllRates>(options));
+    console.log(response.data);
     return { data: response.data.data };
   }
- */
 }

@@ -1,1 +1,4 @@
-export class CreateApiCoinifyDto {}
+export class CreateApiCoinifyDto {
+  apiKey: string;
+  secretKey: string;
+}

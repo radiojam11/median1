@@ -6,10 +6,10 @@ import {
   Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { ApiCoinifyService } from './api-coinify.service';
 import { CreateApiCoinifyDto } from './dto/create-api-coinify.dto';
-import { UpdateApiCoinifyDto } from './dto/update-api-coinify.dto';
 
 @Controller('api-coinify')
 export class ApiCoinifyController {
@@ -52,5 +52,10 @@ export class ApiCoinifyController {
   @Get('ALL')
   getAllRates() {
     return this.apiCoinifyService.getAllRates();
+  }
+
+  @Post()
+  coinifyPayments(@Body() createApiCoinifyDto: CreateApiCoinifyDto) {
+    return this.apiCoinifyService.getCoinifyPayments(createApiCoinifyDto);
   }
 }
