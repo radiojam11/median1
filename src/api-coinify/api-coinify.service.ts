@@ -69,14 +69,10 @@ export class ApiCoinifyService {
     const secretKey = createApiCoinifyDto['secretKey'];
     const date = new Date();
     const nonce = date.getTime().toString();
-    console.log('API KEY :    ', apiKey);
     const message = nonce + apiKey;
-    console.log('message:   ', message);
-    console.log('SECRET API:    ', secretKey);
     const generatedSignature = crypto
       .HmacSHA256(message, secretKey)
       .toString(crypto.enc.Hex);
-    console.log('QUESTO E generateSignature:    ', generatedSignature);
     //Authorization: Coinify apikey="<api_key>", nonce="<nonce>", signature="<signature>""
     const auth_header = `Coinify apiKey="${apiKey}", nonce="${nonce}", signature="${generatedSignature}"`;
     console.log(auth_header);
