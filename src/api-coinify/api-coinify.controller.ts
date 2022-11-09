@@ -14,7 +14,7 @@ import { UpdateApiCoinifyDto } from './dto/update-api-coinify.dto';
 @Controller('api-coinify')
 export class ApiCoinifyController {
   constructor(private readonly apiCoinifyService: ApiCoinifyService) {}
-
+  /* 
   @Post()
   create(@Body() createApiCoinifyDto: CreateApiCoinifyDto) {
     return this.apiCoinifyService.create(createApiCoinifyDto);
@@ -41,5 +41,16 @@ export class ApiCoinifyController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.apiCoinifyService.remove(+id);
+  }
+ */
+
+  @Get('get/:currency')
+  getRateSpecificCurrency(@Param('currency') currency: string) {
+    return this.apiCoinifyService.getRateSpecificCurrency(currency);
+  }
+
+  @Get('ALL')
+  getAllRates() {
+    return this.apiCoinifyService.getAllRates();
   }
 }
